@@ -3,35 +3,37 @@
 using KitchenAppliances;
 
 MyKitchen kitchen = new MyKitchen();
+kitchen.welcomeMessageEdit();
 kitchen.Menu();
-
 namespace KitchenAppliances
 {
-    public interface IKitchenAppliance
+    
+
+    
+    public class MyKitchen : Room
     {
-        string Type { get; set; }
-        string Brand { get; set; }
-        bool IsFunctioning { get; set; }
-    }
-    public class MyKitchen
+        List<MyAppliances> listOfAppliances = new List<MyAppliances>()
     {
-        List<MyAppliances> listOfStuff = new List<MyAppliances>()
-{
     new MyAppliances ("Brödrost", "Philips", true),
     new MyAppliances ("Diskmaskin", "Bosch", true),
     new MyAppliances ("Tekokare", "OBH Nordica", false)
-};
+    };
 
-        int menuChoice;
-        bool running = true;
+        public override void welcomeMessageEdit()
+        {
+            Console.WriteLine("Välkommen till köket!\n");
+        }
         public void Menu()
         {
+            bool running = true;
+            int menuChoice;
             Console.WriteLine("*** Köket - Huvudmeny ***\n" +
                 "1. Använd köksapparat\n" +
                 "2. Lägg till köksapparat\n" +
                 "3. Lista köksapparater\n" +
                 "4. Ta bort köksapparat\n" +
                 "5. Avsluta");
+            Console.Write(">");
             try
             {
                 while (running == true)
@@ -76,19 +78,21 @@ namespace KitchenAppliances
             // Using appliance
             try
             {
-                Console.WriteLine("Vilken köksapparat vill du använda?");
-                for (int i = 0; i < listOfStuff.Count; i++)
+                Console.WriteLine("\nVilken köksapparat vill du använda?\n");
+                Console.Write(">");
+                for (int i = 0; i < listOfAppliances.Count; i++)
                 {
-                    Console.WriteLine(i + 1 + ". " + listOfStuff[i].Type);
+                    Console.WriteLine(i + 1 + ". " + listOfAppliances[i].Type);
                 }
                 int useChoice = int.Parse(Console.ReadLine());
-                if (listOfStuff[useChoice - 1].IsFunctioning == true)
+
+                if (listOfAppliances[useChoice - 1].IsFunctioning == true)
                 {
-                    Console.WriteLine($"Använder {listOfStuff[useChoice - 1].Type} gjord av {listOfStuff[useChoice - 1].Brand}, och den är i fungerande skick.");
+                    Console.WriteLine($"\nLyckades använda {listOfAppliances[useChoice - 1].Type} gjord av {listOfAppliances[useChoice - 1].Brand}.\n");
                 }
                 else
                 {
-                    Console.WriteLine($"Försöker använda {listOfStuff[useChoice - 1].Type} gjord av {listOfStuff[useChoice - 1].Brand}, men den är trasig...");
+                    Console.WriteLine($"\nFörsöker använda {listOfAppliances[useChoice - 1].Type} gjord av {listOfAppliances[useChoice - 1].Brand}, men den är trasig...\n");
                 }
             }
             catch (FormatException e)
@@ -107,13 +111,17 @@ namespace KitchenAppliances
             {
                 Console.WriteLine(e.Message);
             }
+            catch (OutOfMemoryException e)
+            {
+                Console.WriteLine(e.Message);
+            }
             Menu();
         }
-        public void MakeAppliance()
+        private void MakeAppliance()
         {
             string makeChoiceType = "";
             string makeChoiceBrand = "";
-            string makeWorkingInput = "";
+            string makeWorkingInput;
             bool workingInputTrue = true;
             bool makeChoiceFunctioning = true;
 
@@ -122,32 +130,22 @@ namespace KitchenAppliances
             {
                 while (makeChoiceType == "")
                 {
-                    Console.WriteLine("Vad vill du lägga till?");
+                    Console.WriteLine("\nVad vill du lägga till?");
+                    Console.Write(">");
                     makeChoiceType = Console.ReadLine();
                 }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-            }
-            try
-            {
+
                 while (makeChoiceBrand == "")
                 {
-                    Console.WriteLine("Vilket märke?");
+                    Console.WriteLine("\nVilket märke?\n");
+                    Console.Write(">");
                     makeChoiceBrand = Console.ReadLine();
                 }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-            }
 
-            try
-            {
                 while (workingInputTrue == true)
                 {
-                    Console.WriteLine("Fungerar den? j/n");
+                    Console.WriteLine("\nFungerar den? j/n\n");
+                    Console.Write(">");
                     makeWorkingInput = Console.ReadLine();
                     makeWorkingInput = makeWorkingInput.ToLower();
                     if (makeWorkingInput == "j")
@@ -161,41 +159,42 @@ namespace KitchenAppliances
                         workingInputTrue = false;
                     }
                 }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-            }
 
-            try
-            {
-                listOfStuff.Add(new MyAppliances(makeChoiceType, makeChoiceBrand, makeChoiceFunctioning));
+                listOfAppliances.Add(new MyAppliances(makeChoiceType, makeChoiceBrand, makeChoiceFunctioning));
                 if (makeChoiceFunctioning == true)
                 {
-                    Console.WriteLine($"Skapade en {makeChoiceType} av märket {makeChoiceBrand}, och den är i fungerande skick.");
+                    Console.WriteLine($"\nSkapade en {makeChoiceType} av märket {makeChoiceBrand}, och den är i fungerande skick.\n");
                 }
                 else if (makeChoiceFunctioning == false)
                 {
-                    Console.WriteLine($"Skapade en {makeChoiceType} av märket {makeChoiceBrand}, och den är trasig.");
+                    Console.WriteLine($"\nSkapade en {makeChoiceType} av märket {makeChoiceBrand}, och den är trasig.\n");
                 }
             }
             catch (IOException e)
             {
                 Console.WriteLine(e.Message);
             }
+            catch (OutOfMemoryException e)
+            {
+                Console.WriteLine(e.Message);
+            }
+            catch (ArgumentOutOfRangeException e)
+            {
+                Console.WriteLine(e.Message);
+            }
             Menu();
         }
-        public void ListAppliance()
+        private void ListAppliance()
         {
             // List appliances
-
+            Console.WriteLine("\nLista på köksapparater:\n");
             try
             {
-                for (int i = 0; i < listOfStuff.Count; i++)
+                for (int i = 0; i < listOfAppliances.Count; i++)
                 {
                     string isFunctioningList;
 
-                    if (listOfStuff[i].IsFunctioning == true)
+                    if (listOfAppliances[i].IsFunctioning == true)
                     {
                         isFunctioningList = "Denna apparat är i fungerande skick.\n";
                     }
@@ -204,7 +203,7 @@ namespace KitchenAppliances
                         isFunctioningList = "Denna apparat är trasig.\n";
                     }
 
-                    Console.WriteLine(i + 1 + ". " + $"Köksapparat: {listOfStuff[i].Type}." + $" Märke: {listOfStuff[i].Brand}. {isFunctioningList}");
+                    Console.WriteLine(i + 1 + ". " + $"{listOfAppliances[i].Type}." + $" Märke: {listOfAppliances[i].Brand}. {isFunctioningList}");
 
                 }
             }
@@ -214,7 +213,7 @@ namespace KitchenAppliances
             }
             Menu();
         }
-        public void DeleteAppliance()
+        private void DeleteAppliance()
         {
             // Delete appliances
 
@@ -223,13 +222,14 @@ namespace KitchenAppliances
             try
             {
                 Console.WriteLine("Vilken köksapparat vill du ta bort?");
-                for (int i = 0; i < listOfStuff.Count; i++)
+                Console.Write(">");
+                for (int i = 0; i < listOfAppliances.Count; i++)
                 {
-                    Console.WriteLine(i + 1 + ". " + listOfStuff[i].Type);
+                    Console.WriteLine(i + 1 + ". " + listOfAppliances[i].Type);
                 }
                 deleteChoice = int.Parse(Console.ReadLine());
-                Console.WriteLine(listOfStuff[deleteChoice - 1].Type + " har tagits bort från listan.");
-                listOfStuff.RemoveAt(deleteChoice - 1);
+                Console.WriteLine(listOfAppliances[deleteChoice - 1].Type + " har tagits bort från listan.");
+                listOfAppliances.RemoveAt(deleteChoice - 1);
             }
             catch (IOException e)
             {
@@ -247,12 +247,22 @@ namespace KitchenAppliances
             {
                 Console.WriteLine(e.Message);
             }
+            catch (OutOfMemoryException e)
+            {
+                Console.WriteLine(e.Message);
+            }
             catch (ArgumentOutOfRangeException e)
             {
                 Console.WriteLine(e.Message);
             }
             Menu();
         }
+    }
+    public interface IKitchenAppliance
+    {
+        string Type { get; set; }
+        string Brand { get; set; }
+        bool IsFunctioning { get; set; }
     }
     public class MyAppliances : IKitchenAppliance
     {
@@ -265,5 +275,15 @@ namespace KitchenAppliances
         public string Type { get; set; }
         public string Brand { get; set; }
         public bool IsFunctioning { get; set; }
+        
     }
+    public abstract class Room
+    {
+        public abstract void welcomeMessageEdit();
+        protected void welcomeMessageDefault()
+        {
+            Console.WriteLine("Välkommen till rummet!");
+        }
+    }
+    
 }

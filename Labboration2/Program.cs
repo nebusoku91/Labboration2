@@ -3,7 +3,7 @@
 using KitchenAppliances;
 
 MyKitchen kitchen = new MyKitchen();
-kitchen.welcomeMessageEdit();
+kitchen.WelcomeMessageEdit();
 kitchen.Menu();
 namespace KitchenAppliances
 {
@@ -19,7 +19,7 @@ namespace KitchenAppliances
     new MyAppliances ("Tekokare", "OBH Nordica", false)
     };
 
-        public override void welcomeMessageEdit()
+        public override void WelcomeMessageEdit()
         {
             Console.WriteLine("Välkommen till köket!\n");
         }
@@ -79,11 +79,12 @@ namespace KitchenAppliances
             try
             {
                 Console.WriteLine("\nVilken köksapparat vill du använda?\n");
-                Console.Write(">");
                 for (int i = 0; i < listOfAppliances.Count; i++)
                 {
                     Console.WriteLine(i + 1 + ". " + listOfAppliances[i].Type);
                 }
+                Console.Write(">");
+
                 int useChoice = int.Parse(Console.ReadLine());
 
                 if (listOfAppliances[useChoice - 1].IsFunctioning == true)
@@ -222,11 +223,11 @@ namespace KitchenAppliances
             try
             {
                 Console.WriteLine("Vilken köksapparat vill du ta bort?");
-                Console.Write(">");
                 for (int i = 0; i < listOfAppliances.Count; i++)
                 {
                     Console.WriteLine(i + 1 + ". " + listOfAppliances[i].Type);
                 }
+                Console.Write(">");
                 deleteChoice = int.Parse(Console.ReadLine());
                 Console.WriteLine(listOfAppliances[deleteChoice - 1].Type + " har tagits bort från listan.");
                 listOfAppliances.RemoveAt(deleteChoice - 1);
@@ -279,7 +280,7 @@ namespace KitchenAppliances
     }
     public abstract class Room
     {
-        public abstract void welcomeMessageEdit();
+        public abstract void WelcomeMessageEdit();
         protected void welcomeMessageDefault()
         {
             Console.WriteLine("Välkommen till rummet!");
